@@ -40,7 +40,7 @@
   .btn-key:hover { background: var(--rb-keyh); }
   .btn-soft { background: var(--rb-btn); color: var(--rb-head); }
   .btn-soft:hover { background: var(--rb-btnh); }
-  .btn:focus-visible, .faq summary:focus-visible, nav a:focus-visible { outline: 2px solid var(--rb-blue); outline-offset: 2px; }
+  .btn:focus-visible, .faq summary:focus-visible, nav a:focus-visible, .copy:focus-visible, .link:focus-visible, footer a:focus-visible { outline: 2px solid var(--rb-blue); outline-offset: 2px; }
   .ic { display: inline-flex; }
 
   /* nav */
@@ -107,9 +107,10 @@
   blockquote { margin: 0; max-width: 900px; font-size: clamp(24px, 3.4vw, 36px); line-height: 1.2; font-weight: 510; letter-spacing: -.02em; text-wrap: balance; }
 
   /* download + faq */
-  .price { gap: 18px; padding: 28px; border-color: var(--rb-edge); }
-  .reqs { padding: 12px 28px; background: transparent; }
-  .reqs div { display: grid; grid-template-columns: 130px minmax(0,1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rb-line); font-size: 14px; }
+  .reqs { padding: 12px 28px; background: transparent; align-self: start; }
+  .reqs div { display: grid; grid-template-columns: 130px minmax(0,1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rb-line); font-size: 14px; line-height: 1.45; }
+  .reqs div > span:first-child { color: var(--rb-mute); }
+  .reqs div > span:last-child { color: var(--rb-head); }
   .reqs div:last-child { border-bottom: 0; }
   .faq-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 56px; align-items: start; }
   @media (max-width: 820px) { .faq-wrap { grid-template-columns: 1fr; } }
@@ -130,8 +131,18 @@
   .rail { position: relative; height: 48px; margin-top: 56px; }
   .rail::before { content: ""; position: absolute; left: 24px; right: 24px; top: 23px; height: 2px; border-radius: 1px; background: linear-gradient(90deg, var(--rb-line), var(--rb-faint) 30%, var(--rb-faint) 70%, var(--rb-line)); }
   .rail i { position: absolute; top: 18px; width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; }
-  .cmd { position: relative; margin: 0; padding: 14px 72px 14px 16px; border-radius: 8px; background: var(--rb-desk); border: 1px solid var(--rb-line); font-family: var(--rb-mono); font-size: 13px; line-height: 1.6; color: var(--rb-head); overflow-x: auto; white-space: pre; }
-  .cmd .copy { position: absolute; top: 10px; right: 10px; height: 28px; padding: 0 10px; border-radius: 6px; border: 0; background: var(--rb-btn); color: var(--rb-head); font: 500 12px var(--rb-sans); cursor: pointer; }
+  .install { gap: 18px; padding: 24px; border-color: var(--rb-edge); }
+  .cmd { border-radius: 10px; background: var(--rb-sunk); border: 1px solid var(--rb-edge); overflow: hidden; }
+  .cmd-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 14px; border-bottom: 1px solid var(--rb-line); font-size: 12px; color: var(--rb-mute); }
+  .cmd pre { margin: 0; padding: 14px 16px 16px; font-family: var(--rb-mono); font-size: 13.5px; line-height: 1.65; color: var(--rb-head); white-space: pre-wrap; overflow-wrap: break-word; }
+  .cmd .copy { height: 34px; padding: 0 14px; border-radius: 7px; border: 0; background: var(--rb-key); color: var(--rb-keytx); box-shadow: var(--rb-keyshadow); font: 510 13px var(--rb-sans); cursor: pointer; transition: background .12s; }
+  .cmd .copy:hover { background: var(--rb-keyh); }
+  .install .alt { margin: 0; font-size: 14px; line-height: 1.55; color: var(--rb-ink); text-wrap: pretty; }
+  .install .meta { color: var(--rb-mute); }
+  .install .alt b { font-weight: 590; color: var(--rb-head); }
+  .link { color: var(--rb-head); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
+  .link:hover { text-decoration-color: currentColor; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -290,29 +301,27 @@
   </section>
 
 
-  <section id="download" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
+  <section id="download" class="wrap section" style="display:flex;flex-direction:column;gap:40px" aria-labelledby="install-title">
     <div class="head">
-      <span class="eyebrow">Install</span>
-      <h2>Free and open source.</h2>
+      <h2 id="install-title">Install ReviewBar.</h2>
+      <p class="lede">Free and MIT licensed. No account and no server: it runs on your Mac with the Claude Code or Codex login you already have.</p>
     </div>
     <div class="grid sides">
-      <div class="card price">
-        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span style="font-size:40px;font-weight:510;letter-spacing:-.03em;color:var(--rb-head)">$0</span><span style="color:var(--rb-mute);font-size:15px">MIT license · no account · no server</span></div>
-        <span class="lede" style="font-size:15px">Install with Homebrew. Homebrew asks you to trust a new tap once.</span>
-        <pre class="cmd"><code>brew trust ganeshmani/tap
-brew install --cask ganeshmani/tap/reviewbar</code><button type="button" class="copy" aria-label="Copy install commands">Copy</button></pre>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-          <a href="https://github.com/ganeshmani/reviewbar/releases/latest" class="btn btn-soft">Download the .dmg</a>
-          <a href="https://github.com/ganeshmani/reviewbar" class="btn btn-soft">Source on GitHub</a>
+      <div class="card install">
+        <div class="cmd">
+          <div class="cmd-bar"><span>Terminal</span><button type="button" class="copy">Copy command</button></div>
+          <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install --cask ganeshmani/tap/reviewbar</code></pre>
+          <span class="sr-only" aria-live="polite"></span>
         </div>
-        <span class="mono">Signed, not yet notarized: on first launch use System Settings → Privacy &amp; Security → Open Anyway.</span>
+        <p class="alt">Homebrew asks you to trust a new tap once; that's the first half of the command. No Homebrew? <a class="link" href="https://github.com/ganeshmani/reviewbar/releases/download/v1.0.6/ReviewBar-1.0.6.dmg">Download ReviewBar 1.0.6</a> <span class="meta">(.dmg, 3.7&nbsp;MB)</span> and drag it to Applications.</p>
+        <p class="alt"><b>First launch:</b> ReviewBar is signed with a Developer ID, but Apple notarization is still pending. If macOS says it can't verify the app, open System Settings → Privacy &amp; Security and click <b>Open Anyway</b>. The full source is on <a class="link" href="https://github.com/ganeshmani/reviewbar">GitHub</a>.</p>
       </div>
       <div class="card reqs">
-        <div><span style="color:var(--rb-faint)">System</span><span style="color:var(--rb-head);line-height:1.45">macOS 14 Sonoma or later, Apple silicon or Intel</span></div>
-        <div><span style="color:var(--rb-faint)">Code hosts</span><span style="color:var(--rb-head);line-height:1.45">GitLab.com or self-managed · GitHub.com or Enterprise</span></div>
-        <div><span style="color:var(--rb-faint)">Engines</span><span style="color:var(--rb-head);line-height:1.45">Claude Code or Codex CLI, signed in with your own account</span></div>
-        <div><span style="color:var(--rb-faint)">Auth</span><span style="color:var(--rb-head);line-height:1.45">glab or gh login, or a personal access token</span></div>
-        <div><span style="color:var(--rb-faint)">Network</span><span style="color:var(--rb-head);line-height:1.45">Only to your code hosts and your chosen engine</span></div>
+        <div><span>System</span><span>macOS 14 Sonoma or later, Apple silicon or Intel</span></div>
+        <div><span>Review engine</span><span><a class="link" href="https://docs.claude.com/en/docs/claude-code">Claude Code</a> or <a class="link" href="https://github.com/openai/codex">Codex</a> CLI, signed in with your own account</span></div>
+        <div><span>Code hosts</span><span>GitLab.com or self-managed, GitHub.com or Enterprise</span></div>
+        <div><span>Auth</span><span><a class="link" href="https://gitlab.com/gitlab-org/cli">glab</a> or <a class="link" href="https://cli.github.com">gh</a> login, or a personal access token</span></div>
+        <div><span>Network</span><span>Only to your code hosts and your chosen engine</span></div>
       </div>
     </div>
   </section>
@@ -346,7 +355,7 @@ brew install --cask ganeshmani/tap/reviewbar</code><button type="button" class="
       <span class="brand"><svg width="20" height="20"><use href="#mark"/></svg>ReviewBar</span>
       <span style="font-size:13px;color:var(--rb-mute);max-width:280px;line-height:1.5">AI code review in your menu bar. It drafts; you decide.</span>
     </div>
-    <div class="col"><span style="color:var(--rb-faint)">Product</span><a href="#features">Features</a><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#download">Download</a></div>
+    <div class="col"><span style="color:var(--rb-faint)">Product</span><a href="#features">Features</a><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#download">Install</a></div>
     <div class="col"><span style="color:var(--rb-faint)">Open source</span><a href="https://github.com/ganeshmani/reviewbar">GitHub</a><a href="https://github.com/ganeshmani/reviewbar/releases">Releases</a><a href="https://github.com/ganeshmani/reviewbar/blob/main/CHANGELOG.md">Changelog</a><a href="https://github.com/ganeshmani/reviewbar/blob/main/CONTRIBUTING.md">Contributing</a></div>
     <div class="col"><span style="color:var(--rb-faint)">Help</span><a href="#faq">FAQ</a><a href="https://github.com/ganeshmani/reviewbar/issues/new/choose">Report a bug</a><a href="#safety">Privacy</a></div>
   </div>
@@ -359,9 +368,19 @@ brew install --cask ganeshmani/tap/reviewbar</code><button type="button" class="
 
 <script>
   document.querySelectorAll('.cmd .copy').forEach(function (b) {
+    var box = b.closest('.cmd'), code = box.querySelector('code'), live = box.querySelector('[aria-live]');
+    var say = function (label, msg) {
+      b.textContent = label; live.textContent = msg;
+      clearTimeout(b._t); b._t = setTimeout(function () { b.textContent = 'Copy command'; live.textContent = ''; }, 2000);
+    };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(code);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      say('Press ⌘C', 'Command selected. Press Command C to copy.');
+    };
     b.addEventListener('click', function () {
-      var t = b.parentNode.querySelector('code').textContent;
-      if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); });
+      if (!navigator.clipboard || !window.isSecureContext) return fallback();
+      navigator.clipboard.writeText(code.textContent).then(function () { say('Copied', 'Install command copied.'); }, fallback);
     });
   });
 </script>
