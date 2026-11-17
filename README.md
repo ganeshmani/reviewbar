@@ -6,7 +6,7 @@
 A macOS menu bar app for GitLab merge requests and GitHub pull requests, powered by the Claude Code or Codex CLI you already pay for.</p>
 
 <p align="center">
-<code>brew install --cask ganeshmani/tap/reviewbar</code>
+<code>brew trust ganeshmani/tap && brew install --cask ganeshmani/tap/reviewbar</code>
 </p>
 
 <p align="center">
@@ -28,6 +28,7 @@ ReviewBar keeps a human in the middle:
 ## Install
 
 ```bash
+brew trust ganeshmani/tap            # Homebrew asks you to trust third-party taps once
 brew install --cask ganeshmani/tap/reviewbar
 ```
 
