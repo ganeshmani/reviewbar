@@ -1,0 +1,10 @@
+.build/
+build/
+dist/
+.swiftpm/
+.DS_Store
+# private / not part of the open-source app
+founder/
+marketing/
+design-source/
+website/
