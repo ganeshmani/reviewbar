@@ -4,6 +4,7 @@
 
 First open-source release.
 
+- Signed with a Developer ID and notarized by Apple.
 - Fix: the app could hang ("not responding") when finding the `claude` CLI needed a slow login shell. Shell lookups now time out after 15 seconds and run off the main thread.
 - Group the inbox by repository.
 - "Dismiss all" for MRs that were discovered but never reviewed.

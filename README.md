@@ -43,7 +43,7 @@ Or download the DMG from [Releases](https://github.com/ganeshmani/reviewbar/rele
 - [Claude Code](https://docs.claude.com/en/docs/claude-code) (`claude`) or [Codex](https://github.com/openai/codex) (`codex`), logged in.
 - [`glab`](https://gitlab.com/gitlab-org/cli) or [`gh`](https://cli.github.com) logged in, or a personal access token (GitLab `api` scope, GitHub `repo` scope).
 
-> **First launch:** releases are signed but not yet notarized. If macOS says it can't verify the app, open **System Settings → Privacy & Security** and click **Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/ReviewBar.app`.
+> Releases are signed with a Developer ID and notarized by Apple, so they open without warnings.
 
 ## Quick start
 
