@@ -58,6 +58,15 @@
   .stage { max-width: 1280px; margin: clamp(40px, 6vw, 72px) auto 0; padding: 0 24px; box-sizing: border-box; }
   .stage video, .stage img { display: block; width: 100%; height: auto; aspect-ratio: 1280/760; box-sizing: border-box; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: #08090a; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4); object-fit: cover; }
   .stage img { display: none; }
+  .hero-row { display: grid; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 1024px) {
+    .hero-row { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; gap: 56px; padding-top: clamp(56px, 7vw, 96px); }
+    .hero-row .hero { padding-top: 0; }
+    .hero-row h1 { font-size: clamp(40px, 4.4vw, 60px); }
+    .hero-row .hero p { font-size: 18px; }
+    .hero-row .stage { margin: 0; padding: 0; max-width: none; }
+  }
+  @media (max-width: 1023px) { .hero-row { padding: 0; } .hero-row .hero { padding-left: 24px; padding-right: 24px; } }
   [data-rb-mode=light] .stage video, [data-rb-mode=light] .stage img { border-color: rgba(0,0,0,.12); box-shadow: 0 30px 80px rgba(0,0,0,.18); }
   @media (prefers-reduced-motion: reduce) { .stage video { display: none; } .stage img { display: block; } }
 
@@ -139,7 +148,8 @@
 </header>
 
 <main>
-  <section id="top" class="wrap hero">
+  <div class="wrap hero-row">
+  <section id="top" class="hero">
     <span class="eyebrow">Free and open source · for the reviewer</span>
     <h1>Every merge request, reviewed before you open it.</h1>
     <p>ReviewBar queues an AI review for every MR you're asked to review, runs it in the background, and lets you pick what gets posted. It uses the Claude Code or Codex login you already have, and never acts on its own.</p>
@@ -156,6 +166,7 @@
       <source src="hero.mp4" type="video/mp4">
     </video>
     <img src="hero-poster.png" alt="ReviewBar showing three findings on a merge request after you posted them">
+  </div>
   </div>
 
   <section id="statuses" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
