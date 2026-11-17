@@ -6,6 +6,10 @@
 A macOS menu bar app for GitLab merge requests and GitHub pull requests, powered by the Claude Code or Codex CLI you already pay for.</p>
 
 <p align="center">
+<a href="https://reviewbar.vercel.app">Website</a> · <a href="https://github.com/ganeshmani/reviewbar/releases/latest">Download</a> · <a href="CONTRIBUTING.md">Contributing</a> · <a href="CHANGELOG.md">Changelog</a>
+</p>
+
+<p align="center">
 <code>brew trust ganeshmani/tap && brew install --cask ganeshmani/tap/reviewbar</code>
 </p>
 
@@ -99,7 +103,11 @@ ReviewBar --demo --snapshot <dir>          # render every screen to PNG, light a
 
 ## Contributing
 
-Issues and PRs are welcome. Run `swift test` before opening a PR. For UI changes, include a `--demo --snapshot` screenshot.
+Bug reports, ideas and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup, project layout and the PR checklist.
+
+- [Report a bug](https://github.com/ganeshmani/reviewbar/issues/new?template=bug_report.yml) · [Request a feature](https://github.com/ganeshmani/reviewbar/issues/new?template=feature_request.yml) · [Ask a question](https://github.com/ganeshmani/reviewbar/discussions)
+- Security issues: please report privately, see [SECURITY.md](SECURITY.md).
+- Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

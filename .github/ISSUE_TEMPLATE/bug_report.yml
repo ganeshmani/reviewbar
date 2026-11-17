@@ -1,0 +1,52 @@
+name: Bug report
+description: Something isn't working
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Connect GitLab
+        2. Open an MR
+        3. ...
+  - type: input
+    id: version
+    attributes:
+      label: ReviewBar version
+      description: In Finder, select Applications → ReviewBar → Get Info.
+      placeholder: "1.0.6"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and chip
+      placeholder: "macOS 15.2, Apple M2"
+    validations:
+      required: true
+  - type: dropdown
+    id: forge
+    attributes:
+      label: Code host
+      options: [GitLab.com, Self-managed GitLab, GitHub.com, GitHub Enterprise]
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Engine
+      options: [Claude Code, Codex, Not relevant]
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Run logs are in `~/Library/Application Support/ReviewBar/runs/<id>/`. If the app froze, run `sample ReviewBar 5 -file ~/Desktop/hang.txt` while it's stuck and attach the file.
+        **Remove tokens, internal URLs and private code before pasting.**
+      render: text
