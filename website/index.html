@@ -40,7 +40,7 @@
   .btn-key:hover { background: var(--rb-keyh); }
   .btn-soft { background: var(--rb-btn); color: var(--rb-head); }
   .btn-soft:hover { background: var(--rb-btnh); }
-  .btn:focus-visible, .faq summary:focus-visible, nav a:focus-visible, .copy:focus-visible, .link:focus-visible, footer a:focus-visible { outline: 2px solid var(--rb-blue); outline-offset: 2px; }
+  .btn:focus-visible, .faq summary:focus-visible, nav a:focus-visible, .copy:focus-visible, .link:focus-visible, footer a:focus-visible, .brand:focus-visible, .skip:focus-visible { outline: 2px solid var(--rb-blue); outline-offset: 2px; }
   .ic { display: inline-flex; }
 
   /* nav */
@@ -55,20 +55,25 @@
   /* hero */
   .hero { padding-top: clamp(56px, 10vw, 120px); display: flex; flex-direction: column; gap: 24px; }
   .hero p { margin: 0; max-width: 640px; font-size: clamp(17px, 2vw, 20px); line-height: 1.5; color: var(--rb-mute); text-wrap: pretty; }
-  .stage { max-width: 1280px; margin: clamp(40px, 6vw, 72px) auto 0; padding: 0 24px; box-sizing: border-box; }
-  .stage video, .stage img { display: block; width: 100%; height: auto; aspect-ratio: 1280/760; box-sizing: border-box; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: #08090a; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4); object-fit: cover; }
-  .stage img { display: none; }
+  .skip { position: fixed; left: 16px; top: -48px; z-index: 30; padding: 8px 12px; border-radius: 8px; background: var(--rb-key); color: var(--rb-keytx); font-size: 14px; }
+  .skip:focus { top: 12px; }
   .hero-row { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .shot { position: relative; margin: clamp(40px, 6vw, 64px) 24px 0; display: flex; flex-direction: column; align-items: flex-end; }
+  .menubar { align-self: stretch; height: 30px; display: flex; align-items: center; gap: 18px; padding: 0 14px; border-radius: 10px 10px 0 0; background: color-mix(in srgb, var(--rb-head) 6%, var(--rb-desk)); border: 1px solid var(--rb-line); border-bottom: 0; font-size: 12px; color: var(--rb-mute); }
+  .menubar .mb-left { margin-right: auto; font-weight: 590; color: var(--rb-head); }
+  .menubar .mb-icon { width: 30px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: color-mix(in srgb, var(--rb-head) 14%, transparent); color: var(--rb-head); }
+  .shot picture { display: block; width: min(380px, 100%); margin: 8px 44px 0 0; }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--rb-edge); box-shadow: 0 8px 12px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.3); }
+  [data-rb-mode=light] .shot img { box-shadow: 0 8px 12px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.08); }
+  @media (max-width: 1023px) { .shot { align-items: center; } .shot picture { margin-right: 0; } }
   @media (min-width: 1024px) {
-    .hero-row { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; gap: 56px; padding-top: clamp(56px, 7vw, 96px); }
+    .hero-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 56px; padding-top: clamp(56px, 7vw, 96px); }
     .hero-row .hero { padding-top: 0; }
     .hero-row h1 { font-size: clamp(40px, 4.4vw, 60px); }
     .hero-row .hero p { font-size: 18px; }
-    .hero-row .stage { margin: 0; padding: 0; max-width: none; }
+    .hero-row .shot { margin: 0; }
   }
   @media (max-width: 1023px) { .hero-row { padding: 0; } .hero-row .hero { padding-left: 24px; padding-right: 24px; } }
-  [data-rb-mode=light] .stage video, [data-rb-mode=light] .stage img { border-color: rgba(0,0,0,.12); box-shadow: 0 30px 80px rgba(0,0,0,.18); }
-  @media (prefers-reduced-motion: reduce) { .stage video { display: none; } .stage img { display: block; } }
 
   /* statuses */
   .sides { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
@@ -82,6 +87,16 @@
   /* how */
   .steps { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
   .step { gap: 14px; padding: 22px; }
+  .step.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: center; gap: 28px; }
+  .wide-text { display: flex; flex-direction: column; gap: 14px; }
+  .wide-text > span:not(.mono) { font-size: 15px; line-height: 1.55; color: var(--rb-mute); max-width: 52ch; }
+  .rr { margin: 0; gap: 2px; padding: 8px; font-size: 13px; }
+  .rr-head { padding: 4px 8px 8px; color: var(--rb-mute); font-size: 12px; }
+  .rr-row { display: grid; grid-template-columns: 14px 78px minmax(0, 1fr); align-items: center; gap: 8px; height: 30px; padding: 0 8px; border-radius: 6px; }
+  .rr-row:nth-child(2) { background: var(--rb-btn); }
+  .rr-tag { font-weight: 510; }
+  .rr-t { color: var(--rb-head); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 760px) { .step.wide { grid-template-columns: minmax(0, 1fr); } }
   .step b { font-size: 17px; font-weight: 510; color: var(--rb-head); }
   .step > span:not(.mono) { font-size: 14px; line-height: 1.5; color: var(--rb-mute); }
   .demo { margin-top: auto; display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 8px; background: var(--rb-raised); font-size: 12px; }
@@ -103,8 +118,6 @@
   .feature .mono { margin-top: auto; padding-top: 6px; }
 
   /* quote */
-  figure { margin: 0; display: flex; flex-direction: column; gap: 28px; padding: clamp(28px, 5vw, 56px); border-radius: 12px; background: var(--rb-key); color: var(--rb-keytx); box-shadow: var(--rb-keyshadow); }
-  blockquote { margin: 0; max-width: 900px; font-size: clamp(24px, 3.4vw, 36px); line-height: 1.2; font-weight: 510; letter-spacing: -.02em; text-wrap: balance; }
 
   /* download + faq */
   .reqs { padding: 12px 28px; background: transparent; align-self: start; }
@@ -122,6 +135,7 @@
   .faq details[open] summary .ic { transform: rotate(45deg); }
   .faq p { margin: 0; padding: 0 40px 20px 0; font-size: 15px; line-height: 1.6; color: var(--rb-mute); text-wrap: pretty; }
   .close { padding: clamp(96px, 14vw, 176px) 24px clamp(72px, 10vw, 128px); display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
+  .close-cmd { width: min(640px, 100%); text-align: left; }
   .close h2 { font-size: clamp(44px, 8vw, 72px); letter-spacing: -.035em; }
 
   footer { border-top: 1px solid var(--rb-line); }
@@ -150,20 +164,21 @@
   <symbol id="mark" viewBox="0 0 24 24"><rect x="1" y="11" width="11.6" height="2" rx="1" fill="currentColor"/><rect x="21.4" y="11" width="1.6" height="2" rx="1" fill="currentColor"/><circle cx="8" cy="12" r="4" fill="currentColor"/><circle cx="17" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
 </svg>
 
+<a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap">
     <a href="#top" class="brand"><svg width="20" height="20"><use href="#mark"/></svg>ReviewBar</a>
-    <nav aria-label="Sections"><a href="#features">Features</a><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#download">Install</a><a href="https://github.com/ganeshmani/reviewbar">GitHub</a></nav>
+    <nav aria-label="Sections"><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#features">Features</a><a href="#download">Install</a><a href="https://github.com/ganeshmani/reviewbar">GitHub</a></nav>
     <a href="#download" class="btn btn-key">Install</a>
   </div>
 </header>
 
-<main>
+<main id="main">
   <div class="wrap hero-row">
   <section id="top" class="hero">
     <span class="eyebrow">Free and open source · for the reviewer</span>
     <h1>Every merge request, reviewed before you open it.</h1>
-    <p>ReviewBar queues an AI review for every MR you're asked to review, runs it in the background, and lets you pick what gets posted. It uses the Claude Code or Codex login you already have, and never acts on its own.</p>
+    <p>ReviewBar queues an AI review for every MR or PR you're asked to review, runs it in the background, re-reviews only what changed after a push, and lets you pick what gets posted. It uses the Claude Code or Codex login you already have, and never acts on its own.</p>
     <div style="display:flex;flex-wrap:wrap;gap:10px;padding-top:4px">
       <a href="#download" class="btn btn-key">Install with Homebrew</a>
       <a href="https://github.com/ganeshmani/reviewbar" class="btn btn-soft">View on GitHub <rb-icon name="right" size="14"></rb-icon></a>
@@ -171,14 +186,68 @@
     <span class="mono">macOS 14+ · GitLab + GitHub · Claude or Codex</span>
   </section>
 
-  <div class="stage">
-    <video id="hero" autoplay muted loop playsinline preload="metadata" poster="hero-poster.png" aria-label="ReviewBar reviewing a merge request: queued, reviewing, three findings, you post them">
-      <source src="hero.webm" type="video/webm">
-      <source src="hero.mp4" type="video/mp4">
-    </video>
-    <img src="hero-poster.png" alt="ReviewBar showing three findings on a merge request after you posted them">
+  <div class="shot" aria-label="ReviewBar's review screen open under its menu bar icon" role="img">
+    <div class="menubar" aria-hidden="true"><span class="mb-left">Editor</span><span class="mb-icon"><svg width="16" height="16"><use href="#mark"/></svg></span><span>Thu 09:41</span></div>
+    <picture>
+      <source srcset="app-review-light.png" media="(prefers-color-scheme: light)">
+      <img src="app-review-dark.png" width="380" height="600" alt="ReviewBar showing a finished review of payments-api !628: changes requested, two blocker findings selected, and a Post 2 findings button.">
+    </picture>
   </div>
   </div>
+
+  <section id="how" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
+    <div class="head">
+      <span class="eyebrow">How it works</span>
+      <h2>From "you've been added as reviewer" to a decision.</h2>
+    </div>
+    <div class="grid steps">
+      <div class="card step">
+        <span class="mono">01</span><b>Queued automatically</b>
+        <span>When you're added as reviewer or assignee, or the author pushes, the MR or PR joins the queue.</span>
+        <div class="demo">
+          <div style="display:flex;gap:6px;min-width:0"><span style="color:var(--rb-mute);white-space:nowrap">notify-svc</span><span style="font-family:var(--rb-mono);color:var(--rb-mute)">#88</span><span style="font-weight:510;color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bump SES client to v3</span></div>
+          <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span class="ic" style="color:var(--rb-grey)"><rb-icon name="clock" size="12" stroke="2"></rb-icon></span>Queued · #2 · after !2031</span>
+        </div>
+      </div>
+      <div class="card step">
+        <span class="mono">02</span><b>Reviewed in the background</b>
+        <span>Claude or Codex reads the diff while you work. One review at a time by default.</span>
+        <div class="demo" style="gap:2px;padding:6px">
+          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;color:var(--rb-mute)"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span>Fetching diff</span>
+          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;border-radius:6px;background:var(--rb-btn);color:var(--rb-head)"><span class="ic" style="color:var(--rb-blue)"><rb-icon name="running" size="12" stroke="2"></rb-icon></span>Reviewing with Claude · 1m 40s</span>
+          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;color:var(--rb-faint)"><rb-icon name="circle-dashed" size="12" stroke="2"></rb-icon>Checking findings</span>
+        </div>
+      </div>
+      <div class="card step">
+        <span class="mono">03</span><b>Notified with severity counts</b>
+        <span>One notification per finished review, with what matters in the title.</span>
+        <div class="demo" style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;border-radius:10px;box-shadow:0 0 0 1px var(--rb-line)">
+          <span style="width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-keytx)"><svg width="16" height="16"><use href="#mark"/></svg></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:510;color:var(--rb-head)">Review done · payments-api !628</span><span style="display:flex;align-items:center;gap:4px;color:var(--rb-ink)"><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="11" stroke="2"></rb-icon></span>2 blockers, 1 should-fix</span></span>
+        </div>
+      </div>
+      <div class="card step">
+        <span class="mono">04</span><b>You decide</b>
+        <span>Tick the findings worth posting as inline comments, or approve. Or snooze, or dismiss.</span>
+        <div class="demo" style="gap:8px">
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-pop)"><rb-icon name="check" size="9" stroke="3.5"></rb-icon></span><span class="sev">Blocker</span><span style="color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lock TTL expires mid-sync</span></span>
+          <div style="display:flex;gap:6px"><span style="flex:1;height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-key);color:var(--rb-keytx);box-shadow:var(--rb-keyshadow);font-weight:510">Post 3 findings…</span><span style="height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-btn);color:var(--rb-head);font-weight:510">Approve…</span></div>
+        </div>
+      </div>
+      <div class="card step wide">
+        <div class="wide-text">
+          <span class="mono">05</span><b>Re-reviewed on push</b>
+          <span>When the author pushes, only the new commits are reviewed. Each finding you posted is marked resolved or still open, so round two is just reading what's left.</span>
+        </div>
+        <div class="demo rr">
+          <span class="rr-head">Re-review · payments-api !628 · 3 new commits</span>
+          <span class="rr-row"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-green)">Resolved</span><span class="rr-t">Missing idempotency key on charge</span></span>
+          <span class="rr-row"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-green)">Resolved</span><span class="rr-t">Sync can double-charge on retry</span></span>
+          <span class="rr-row"><span class="ic" style="color:var(--rb-orange)"><rb-icon name="dot" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-orange)">Still open</span><span class="rr-t">Webhook signature isn't verified</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="statuses" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
     <div class="head">
@@ -218,48 +287,6 @@
     </div>
   </section>
 
-  <section id="how" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
-    <div class="head">
-      <span class="eyebrow">How it works</span>
-      <h2>From "you've been added as reviewer" to a decision.</h2>
-    </div>
-    <div class="grid steps">
-      <div class="card step">
-        <span class="mono">01</span><b>Queued automatically</b>
-        <span>When you're added as reviewer or assignee, or the author pushes, the MR joins the queue.</span>
-        <div class="demo">
-          <div style="display:flex;gap:6px;min-width:0"><span style="color:var(--rb-mute)">notify-svc</span><span style="font-family:var(--rb-mono);color:var(--rb-mute)">#88</span><span style="font-weight:510;color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bump SES client to v3</span></div>
-          <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span class="ic" style="color:var(--rb-grey)"><rb-icon name="clock" size="12" stroke="2"></rb-icon></span>Queued · #2 · after !2031</span>
-        </div>
-      </div>
-      <div class="card step">
-        <span class="mono">02</span><b>Reviewed in the background</b>
-        <span>Claude or Codex reads the diff while you work. One review at a time by default.</span>
-        <div class="demo" style="gap:2px;padding:6px">
-          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;color:var(--rb-mute)"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span>Fetching diff</span>
-          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;border-radius:6px;background:var(--rb-btn);color:var(--rb-head)"><span class="ic" style="color:var(--rb-blue)"><rb-icon name="running" size="12" stroke="2"></rb-icon></span>Reviewing with Claude · 1m 40s</span>
-          <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;color:var(--rb-faint)"><rb-icon name="circle-dashed" size="12" stroke="2"></rb-icon>Checking findings</span>
-        </div>
-      </div>
-      <div class="card step">
-        <span class="mono">03</span><b>Notified with severity counts</b>
-        <span>One notification per finished review, with what matters in the title.</span>
-        <div class="demo" style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;border-radius:10px;box-shadow:0 0 0 1px var(--rb-line)">
-          <span style="width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-keytx)"><svg width="16" height="16"><use href="#mark"/></svg></span>
-          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:510;color:var(--rb-head)">Review done · payments-api !628</span><span style="display:flex;align-items:center;gap:4px;color:var(--rb-ink)"><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="11" stroke="2"></rb-icon></span>2 blockers, 1 should-fix</span></span>
-        </div>
-      </div>
-      <div class="card step">
-        <span class="mono">04</span><b>You decide</b>
-        <span>Tick the findings worth posting as inline comments, or approve. Or snooze, or dismiss.</span>
-        <div class="demo" style="gap:8px">
-          <span style="display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-pop)"><rb-icon name="check" size="9" stroke="3.5"></rb-icon></span><span class="sev">Blocker</span><span style="color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lock TTL expires mid-sync</span></span>
-          <div style="display:flex;gap:6px"><span style="flex:1;height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-key);color:var(--rb-keytx);box-shadow:var(--rb-keyshadow);font-weight:510">Post 3 findings…</span><span style="height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-btn);color:var(--rb-head);font-weight:510">Approve…</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="safety" class="wrap section safety">
     <div class="head">
       <span class="eyebrow">Safety</span>
@@ -292,14 +319,13 @@
     </div>
     <div class="grid features">
       <div class="card feature"><span class="ico"><rb-icon name="inbox" size="16" stroke="1.5"></rb-icon></span><b>Segmented inbox</b><span>Decide, In progress, Waiting, Failed, Done. Grouped by what you need to do, or by repo if you prefer.</span><span class="mono">⌘1 – ⌘5</span></div>
-      <div class="card feature"><span class="ico"><rb-icon name="refresh" size="16" stroke="1.5"></rb-icon></span><b>Outdated detection</b><span>New commits after a review mark it outdated, so you never post findings against code that moved.</span><span class="mono">Re-review now · Review anyway</span></div>
+      <div class="card feature"><span class="ico"><rb-icon name="refresh" size="16" stroke="1.5"></rb-icon></span><b>Knows when code moved</b><span>New commits mark a review outdated, so you never post against stale code. Re-review checks only the new commits.</span><span class="mono">Re-review now · Review anyway</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="cpu" size="16" stroke="1.5"></rb-icon></span><b>Second opinion</b><span>Run Claude and Codex on the same MR. Findings both engines agree on are tagged.</span><span class="mono">Claude ↔ Codex</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="pause" size="16" stroke="1.5"></rb-icon></span><b>Resource gate</b><span>Point ReviewBar at your own gate command. When it says the Mac is busy, the review waits in the queue and tries again later.</span><span class="mono">Running 1 of 1 slot</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="bell" size="16" stroke="1.5"></rb-icon></span><b>Notifications that say something</b><span>Severity counts in the title. Quiet hours deliver silently. A daily digest if you prefer one.</span><span class="mono">Open · Snooze</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="arrow" size="16" stroke="1.5"></rb-icon></span><b>Keyboard first</b><span>Global shortcut to open, arrows to move, Return to review, ⌘↩ to post the selection.</span><span class="mono">⌥⌘R</span></div>
     </div>
   </section>
-
 
   <section id="download" class="wrap section" style="display:flex;flex-direction:column;gap:40px" aria-labelledby="install-title">
     <div class="head">
@@ -313,7 +339,7 @@
           <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install --cask ganeshmani/tap/reviewbar</code></pre>
           <span class="sr-only" aria-live="polite"></span>
         </div>
-        <p class="alt">Homebrew asks you to trust a new tap once; that's the first half of the command. No Homebrew? <a class="link" href="https://github.com/ganeshmani/reviewbar/releases/download/v1.0.6/ReviewBar-1.0.6.dmg">Download ReviewBar 1.0.6</a> <span class="meta">(.dmg, 3.7&nbsp;MB)</span> and drag it to Applications.</p>
+        <p class="alt">Homebrew asks you to trust a new tap once; that's the first half of the command. No Homebrew? <a class="link" href="https://github.com/ganeshmani/reviewbar/releases/latest/download/ReviewBar.dmg">Download ReviewBar</a> <span class="meta">(.dmg, 3.7&nbsp;MB)</span> and drag it to Applications.</p>
         <p class="alt">Signed with a Developer ID and notarized by Apple, so it opens like any other Mac app. The full source is on <a class="link" href="https://github.com/ganeshmani/reviewbar">GitHub</a>.</p>
       </div>
       <div class="card reqs">
@@ -343,9 +369,13 @@
   </section>
 
   <section class="wrap close">
-    <h2>Decide in under a minute.</h2>
-    <a href="#download" class="btn btn-key">Install ReviewBar</a>
-    <span class="mono">macOS 14+ · GitLab + GitHub · Claude or Codex</span>
+    <h2>Your next review is already queued.</h2>
+    <div class="cmd close-cmd">
+      <div class="cmd-bar"><span>Terminal</span><button type="button" class="copy">Copy command</button></div>
+      <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install --cask ganeshmani/tap/reviewbar</code></pre>
+      <span class="sr-only" aria-live="polite"></span>
+    </div>
+    <span class="mono">macOS 14+ · GitLab + GitHub · Claude or Codex · <a class="link" href="#download">Other ways to install</a></span>
   </section>
 </main>
 
@@ -367,6 +397,11 @@
 </footer>
 
 <script>
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    addEventListener('load', function () { document.querySelectorAll('svg').forEach(function (v) { if (v.pauseAnimations) v.pauseAnimations(); }); });
+  }
+</script>
+<script>
   document.querySelectorAll('.cmd .copy').forEach(function (b) {
     var box = b.closest('.cmd'), code = box.querySelector('code'), live = box.querySelector('[aria-live]');
     var say = function (label, msg) {
@@ -383,17 +418,6 @@
       navigator.clipboard.writeText(code.textContent).then(function () { say('Copied', 'Install command copied.'); }, fallback);
     });
   });
-</script>
-<script>
-  // Some browsers ignore the muted attribute for autoplay, or fail to decode the WebM: make both explicit.
-  (function () {
-    var v = document.getElementById('hero');
-    if (!v) return;
-    v.muted = true; v.defaultMuted = true;
-    var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
-    v.addEventListener('error', function () { if (!/\.mp4$/.test(v.currentSrc)) { v.src = 'hero.mp4'; v.load(); play(); } }, true);
-    play();
-  })();
 </script>
 </body>
 </html>

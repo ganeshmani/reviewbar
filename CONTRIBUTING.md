@@ -55,7 +55,7 @@ Short imperative subject line ("Fix popover jumping on tab switch"), with a body
 
 1. Bump `VERSION` in `scripts/build-app.sh` and add an entry to `CHANGELOG.md`.
 2. `SIGN_ID="Developer ID Application: …" scripts/build-app.sh`, package the DMG, notarize and staple it.
-3. `gh release create vX.Y.Z ReviewBar-X.Y.Z.dmg`.
+3. `gh release create vX.Y.Z ReviewBar-X.Y.Z.dmg ReviewBar.dmg` (the second is a copy with a fixed name; the website links to `releases/latest/download/ReviewBar.dmg`).
 4. Update `version` and `sha256` in [`ganeshmani/homebrew-tap`](https://github.com/ganeshmani/homebrew-tap/blob/main/Casks/reviewbar.rb).
 
 By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE).
