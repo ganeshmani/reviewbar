@@ -45,7 +45,9 @@
     attributeChangedCallback() { if (this.shadowRoot) this.draw(); }
     draw() {
       const s = this.getAttribute('size') || 14, w = this.getAttribute('stroke') || 1.75;
-      this.shadowRoot.innerHTML = `<style>:host{display:inline-flex;flex:none;line-height:0}</style><svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${P[this.getAttribute('name')] || ''}</svg>`;
+      let body = P[this.getAttribute('name')] || '';
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) body = body.replace(/<animateTransform[^>]*\/>/g, '');
+      this.shadowRoot.innerHTML = `<style>:host{display:inline-flex;flex:none;line-height:0}</style><svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
     }
   }
   const BASE = {

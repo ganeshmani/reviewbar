@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ReviewBar — AI code review in your menu bar</title>
-<meta name="description" content="ReviewBar queues an AI review for every merge request you're asked to review, runs it in the background, and lets you post or approve in one click. It never acts on its own.">
-<meta property="og:title" content="ReviewBar — Every merge request, reviewed before you open it.">
-<meta property="og:description" content="AI code review in your menu bar. It drafts; you decide.">
-<meta property="og:image" content="https://reviewbar.vercel.app/hero-poster.png">
+<meta name="description" content="ReviewBar runs an AI review of every MR or PR you're asked to review, in the background, with your own Claude Code or Codex login. You pick what gets posted. It never acts on its own.">
+<meta property="og:title" content="Every MR or PR, reviewed before you open it.">
+<meta property="og:description" content="A free, open-source Mac menu bar app. AI drafts the review with your own Claude Code or Codex login; you pick what gets posted.">
+<meta property="og:image" content="https://reviewbar.vercel.app/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#08090a">
 <link rel="icon" href="app-icon.png">
@@ -26,7 +26,6 @@
   a { color: inherit; text-decoration: none; }
   .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
   .section { padding-top: clamp(72px, 10vw, 128px); }
-  .eyebrow { font-family: var(--rb-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--rb-faint); }
   .mono { font-family: var(--rb-mono); font-size: 12px; color: var(--rb-faint); }
   h1, h2 { margin: 0; font-weight: 510; color: var(--rb-head); text-wrap: balance; line-height: 1; }
   h1 { font-size: clamp(40px, 7vw, 64px); letter-spacing: -.03em; max-width: 880px; }
@@ -60,8 +59,10 @@
   .hero-row { display: grid; grid-template-columns: minmax(0, 1fr); }
   .shot { position: relative; margin: clamp(40px, 6vw, 64px) 24px 0; display: flex; flex-direction: column; align-items: flex-end; }
   .menubar { align-self: stretch; height: 30px; display: flex; align-items: center; gap: 18px; padding: 0 14px; border-radius: 10px 10px 0 0; background: color-mix(in srgb, var(--rb-head) 6%, var(--rb-desk)); border: 1px solid var(--rb-line); border-bottom: 0; font-size: 12px; color: var(--rb-mute); }
-  .menubar .mb-left { margin-right: auto; font-weight: 590; color: var(--rb-head); }
-  .menubar .mb-icon { width: 30px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: color-mix(in srgb, var(--rb-head) 14%, transparent); color: var(--rb-head); }
+  .menubar .mb-left { font-weight: 590; color: var(--rb-head); }
+  .menubar .mb-menu { color: var(--rb-mute); font-weight: 400; }
+  .menubar .mb-badge { position: absolute; top: -3px; right: -5px; min-width: 14px; height: 14px; padding: 0 3px; box-sizing: border-box; border-radius: 7px; background: var(--rb-red); color: #fff; font: 600 9px/14px var(--rb-sans); text-align: center; }
+  .menubar .mb-icon { width: 30px; height: 22px; display: flex; align-items: center; justify-content: center; position: relative; border-radius: 6px; background: color-mix(in srgb, var(--rb-head) 14%, transparent); color: var(--rb-head); }
   .shot picture { display: block; width: min(380px, 100%); margin: 8px 44px 0 0; }
   .shot img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--rb-edge); box-shadow: 0 8px 12px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.3); }
   [data-rb-mode=light] .shot img { box-shadow: 0 8px 12px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.08); }
@@ -100,12 +101,16 @@
   .step b { font-size: 17px; font-weight: 510; color: var(--rb-head); }
   .step > span:not(.mono) { font-size: 14px; line-height: 1.5; color: var(--rb-mute); }
   .demo { margin-top: auto; display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 8px; background: var(--rb-raised); font-size: 12px; }
-  .sev { height: 18px; display: inline-flex; align-items: center; padding: 0 6px; border-radius: 6px; font-size: 10px; font-weight: 510; background: color-mix(in srgb, var(--rb-red) 14%, transparent); color: var(--rb-red); }
+  .sev { height: 18px; display: inline-flex; align-items: center; padding: 0 6px; border-radius: 6px; font-size: 11px; font-weight: 510; background: color-mix(in srgb, var(--rb-red) 14%, transparent); color: var(--rb-red); }
 
   /* safety */
   .safety { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; align-items: start; }
   .list { display: flex; flex-direction: column; border-top: 1px solid var(--rb-line); margin: 0; padding: 0; list-style: none; }
   .list li { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--rb-line); }
+  .safety > .head { position: sticky; top: 92px; }
+  @media (max-width: 900px) { .safety > .head { position: static; } }
+  .group { display: flex; flex-direction: column; gap: 32px; }
+  .group h3 { margin: 0 0 12px; font-size: 13px; font-weight: 510; color: var(--rb-mute); }
   .list b { display: block; font-size: 15px; font-weight: 510; color: var(--rb-head); margin-bottom: 3px; }
   .list span { font-size: 14px; line-height: 1.5; color: var(--rb-mute); }
 
@@ -116,8 +121,6 @@
   .feature b { font-size: 17px; font-weight: 510; color: var(--rb-head); }
   .feature > span:not(.mono):not(.ico) { font-size: 14px; line-height: 1.5; color: var(--rb-mute); text-wrap: pretty; }
   .feature .mono { margin-top: auto; padding-top: 6px; }
-
-  /* quote */
 
   /* download + faq */
   .reqs { padding: 12px 28px; background: transparent; align-self: start; }
@@ -133,7 +136,7 @@
   .faq summary::-webkit-details-marker { display: none; }
   .faq summary .ic { margin-left: auto; color: var(--rb-mute); transition: transform 160ms cubic-bezier(.2,.8,.2,1); }
   .faq details[open] summary .ic { transform: rotate(45deg); }
-  .faq p { margin: 0; padding: 0 40px 20px 0; font-size: 15px; line-height: 1.6; color: var(--rb-mute); text-wrap: pretty; }
+  .faq p { margin: 0; padding: 0 40px 20px 0; max-width: 68ch; font-size: 15px; line-height: 1.6; color: var(--rb-mute); text-wrap: pretty; }
   .close { padding: clamp(96px, 14vw, 176px) 24px clamp(72px, 10vw, 128px); display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center; }
   .close-cmd { width: min(640px, 100%); text-align: left; }
   .close h2 { font-size: clamp(44px, 8vw, 72px); letter-spacing: -.035em; }
@@ -156,6 +159,9 @@
   .install .alt b { font-weight: 590; color: var(--rb-head); }
   .link { color: var(--rb-head); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
   .link:hover { text-decoration-color: currentColor; }
+  .nw { white-space: nowrap; }
+  .close .mono { line-height: 1.7; text-wrap: balance; }
+  .close .mono .link { white-space: nowrap; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
@@ -176,18 +182,17 @@
 <main id="main">
   <div class="wrap hero-row">
   <section id="top" class="hero">
-    <span class="eyebrow">Free and open source · for the reviewer</span>
-    <h1>Every merge request, reviewed before you open it.</h1>
-    <p>ReviewBar queues an AI review for every MR or PR you're asked to review, runs it in the background, re-reviews only what changed after a push, and lets you pick what gets posted. It uses the Claude Code or Codex login you already have, and never acts on its own.</p>
+    <h1>Every MR&nbsp;and&nbsp;PR, reviewed before you open&nbsp;it.</h1>
+    <p>An AI first pass on every MR or PR you're asked to review, run in the background with the Claude Code or Codex login you already have. You pick what gets posted; it never acts on its own.</p>
     <div style="display:flex;flex-wrap:wrap;gap:10px;padding-top:4px">
       <a href="#download" class="btn btn-key">Install with Homebrew</a>
       <a href="https://github.com/ganeshmani/reviewbar" class="btn btn-soft">View on GitHub <rb-icon name="right" size="14"></rb-icon></a>
     </div>
-    <span class="mono">macOS 14+ · GitLab + GitHub · Claude or Codex</span>
+    <span class="mono">Free and open source · macOS 14+ · GitLab + GitHub</span>
   </section>
 
-  <div class="shot" aria-label="ReviewBar's review screen open under its menu bar icon" role="img">
-    <div class="menubar" aria-hidden="true"><span class="mb-left">Editor</span><span class="mb-icon"><svg width="16" height="16"><use href="#mark"/></svg></span><span>Thu 09:41</span></div>
+  <div class="shot">
+    <div class="menubar" aria-hidden="true"><span class="mb-left">Editor</span><span class="mb-menu">File</span><span class="mb-menu">Edit</span><span class="mb-menu" style="margin-right:auto">View</span><span class="mb-icon"><svg width="16" height="16"><use href="#mark"/></svg><span class="mb-badge">2</span></span><span>Thu 09:41</span></div>
     <picture>
       <source srcset="app-review-light.png" media="(prefers-color-scheme: light)">
       <img src="app-review-dark.png" width="380" height="600" alt="ReviewBar showing a finished review of payments-api !628: changes requested, two blocker findings selected, and a Post 2 findings button.">
@@ -197,7 +202,6 @@
 
   <section id="how" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
     <div class="head">
-      <span class="eyebrow">How it works</span>
       <h2>From "you've been added as reviewer" to a decision.</h2>
     </div>
     <div class="grid steps">
@@ -206,12 +210,12 @@
         <span>When you're added as reviewer or assignee, or the author pushes, the MR or PR joins the queue.</span>
         <div class="demo">
           <div style="display:flex;gap:6px;min-width:0"><span style="color:var(--rb-mute);white-space:nowrap">notify-svc</span><span style="font-family:var(--rb-mono);color:var(--rb-mute)">#88</span><span style="font-weight:510;color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bump SES client to v3</span></div>
-          <span style="display:flex;align-items:center;gap:4px;font-size:11px"><span class="ic" style="color:var(--rb-grey)"><rb-icon name="clock" size="12" stroke="2"></rb-icon></span>Queued · #2 · after !2031</span>
+          <span style="display:flex;align-items:center;gap:4px;font-size:12px"><span class="ic" style="color:var(--rb-grey)"><rb-icon name="clock" size="12" stroke="2"></rb-icon></span>Queued · #2 · after !2031</span>
         </div>
       </div>
       <div class="card step">
         <span class="mono">02</span><b>Reviewed in the background</b>
-        <span>Claude or Codex reads the diff while you work. One review at a time by default.</span>
+        <span>Claude or Codex reads the diff while you work, one review at a time so your Mac stays quick.</span>
         <div class="demo" style="gap:2px;padding:6px">
           <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;color:var(--rb-mute)"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span>Fetching diff</span>
           <span style="display:flex;align-items:center;gap:7px;height:24px;padding:0 6px;border-radius:6px;background:var(--rb-btn);color:var(--rb-head)"><span class="ic" style="color:var(--rb-blue)"><rb-icon name="running" size="12" stroke="2"></rb-icon></span>Reviewing with Claude · 1m 40s</span>
@@ -223,27 +227,27 @@
         <span>One notification per finished review, with what matters in the title.</span>
         <div class="demo" style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;border-radius:10px;box-shadow:0 0 0 1px var(--rb-line)">
           <span style="width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-keytx)"><svg width="16" height="16"><use href="#mark"/></svg></span>
-          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:510;color:var(--rb-head)">Review done · payments-api !628</span><span style="display:flex;align-items:center;gap:4px;color:var(--rb-ink)"><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="11" stroke="2"></rb-icon></span>2 blockers, 1 should-fix</span></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:510;color:var(--rb-head)">Review done · payments-api !628</span><span style="display:flex;align-items:center;gap:4px;color:var(--rb-ink)"><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="11" stroke="2"></rb-icon></span>2 blockers, 2 should-fix</span></span>
         </div>
       </div>
       <div class="card step">
         <span class="mono">04</span><b>You decide</b>
         <span>Tick the findings worth posting as inline comments, or approve. Or snooze, or dismiss.</span>
         <div class="demo" style="gap:8px">
-          <span style="display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-pop)"><rb-icon name="check" size="9" stroke="3.5"></rb-icon></span><span class="sev">Blocker</span><span style="color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Lock TTL expires mid-sync</span></span>
-          <div style="display:flex;gap:6px"><span style="flex:1;height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-key);color:var(--rb-keytx);box-shadow:var(--rb-keyshadow);font-weight:510">Post 3 findings…</span><span style="height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-btn);color:var(--rb-head);font-weight:510">Approve…</span></div>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--rb-key);color:var(--rb-pop)"><rb-icon name="check" size="9" stroke="3.5"></rb-icon></span><span class="sev">Blocker</span><span style="color:var(--rb-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Missing idempotency key on charge</span></span>
+          <div style="display:flex;gap:6px"><span style="flex:1;height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-key);color:var(--rb-keytx);box-shadow:var(--rb-keyshadow);font-weight:510">Post 2 findings…</span><span style="height:30px;display:flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--rb-btn);color:var(--rb-head);font-weight:510">Approve…</span></div>
         </div>
       </div>
       <div class="card step wide">
         <div class="wide-text">
           <span class="mono">05</span><b>Re-reviewed on push</b>
-          <span>When the author pushes, only the new commits are reviewed. Each finding you posted is marked resolved or still open, so round two is just reading what's left.</span>
+          <span>When the author pushes, only the new commits are reviewed. Each finding you posted is marked resolved or still open, so round two is just reading what's left. Security findings stay with you.</span>
         </div>
         <div class="demo rr">
-          <span class="rr-head">Re-review · payments-api !628 · 3 new commits</span>
+          <span class="rr-head">Re-review · payments-api !628 · 2 new commits</span>
           <span class="rr-row"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-green)">Resolved</span><span class="rr-t">Missing idempotency key on charge</span></span>
-          <span class="rr-row"><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-green)">Resolved</span><span class="rr-t">Sync can double-charge on retry</span></span>
-          <span class="rr-row"><span class="ic" style="color:var(--rb-orange)"><rb-icon name="dot" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-orange)">Still open</span><span class="rr-t">Webhook signature isn't verified</span></span>
+          <span class="rr-row"><span class="ic" style="color:var(--rb-orange)"><rb-icon name="dot" size="12" stroke="2"></rb-icon></span><span class="rr-tag" style="color:var(--rb-orange)">Still open</span><span class="rr-t">Sync can double-charge on retry</span></span>
+          <span class="rr-row" style="color:var(--rb-mute)"><span class="ic"><rb-icon name="lock" size="12" stroke="2"></rb-icon></span><span class="rr-tag">Private</span><span class="rr-t" style="color:var(--rb-mute)">Webhook signature · Security · not posted</span></span>
         </div>
       </div>
     </div>
@@ -251,21 +255,18 @@
 
   <section id="statuses" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
     <div class="head">
-      <span class="eyebrow">The two statuses</span>
-      <h2>What the AI did, and what you decided. Never the same thing.</h2>
+      <h2>What the AI found is never what you decided.</h2>
       <p class="lede">A finished review isn't a decision. ReviewBar keeps them apart on every row, so "clean" never quietly turns into "approved".</p>
     </div>
     <div class="grid sides">
       <div class="card side">
         <div style="display:flex;align-items:center;gap:14px">
           <div class="bar"><span class="bead" style="left:24px;background:var(--rb-head)"></span></div>
-          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:510;letter-spacing:-.015em;color:var(--rb-head)">What the AI did</span><span class="mono">run status · solid bead</span></span>
+          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:510;letter-spacing:-.015em;color:var(--rb-head)">What the AI did</span><span class="mono">set by ReviewBar</span></span>
         </div>
-        <p class="lede" style="font-size:15px">Where the review is and what it found. Set by ReviewBar, updated live.</p>
         <div class="rows">
           <div><span class="ic" style="color:var(--rb-grey)"><rb-icon name="clock" size="14"></rb-icon></span>Queued<span class="mono">#2 · after !2031</span></div>
-          <div><span class="ic" style="color:var(--rb-blue)"><rb-icon name="running" size="14"></rb-icon></span>Reviewing<span class="mono">3m</span></div>
-          <div><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="14"></rb-icon></span>2 blockers · 1 should-fix<span class="mono">!628</span></div>
+          <div><span class="ic" style="color:var(--rb-red)"><rb-icon name="alert" size="14"></rb-icon></span>2 blockers · 2 should-fix<span class="mono">!628</span></div>
           <div><span class="ic" style="color:var(--rb-green)"><rb-icon name="seal" size="14"></rb-icon></span>Clean<span class="mono">!12762</span></div>
           <div><span class="ic" style="color:var(--rb-purple)"><rb-icon name="refresh" size="14"></rb-icon></span>New commits since review<span class="mono">!619</span></div>
         </div>
@@ -273,14 +274,12 @@
       <div class="card side">
         <div style="display:flex;align-items:center;gap:14px">
           <div class="bar"><span class="bead" style="left:78px;background:var(--rb-pop)"></span></div>
-          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:510;letter-spacing:-.015em;color:var(--rb-head)">What you decided</span><span class="mono">decision status · open bead</span></span>
+          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:510;letter-spacing:-.015em;color:var(--rb-head)">What you decided</span><span class="mono">only you change it</span></span>
         </div>
-        <p class="lede" style="font-size:15px">What happened on GitLab or GitHub because you chose it. Only you can change it.</p>
         <div class="rows">
           <div><span class="ic" style="color:var(--rb-ink)"><rb-icon name="dot" size="14"></rb-icon></span>Needs decision<span class="mono">—</span></div>
-          <div><span class="ic" style="color:var(--rb-blue)"><rb-icon name="msg" size="14"></rb-icon></span>3 comments posted<span class="mono">at a1b2c3d</span></div>
+          <div><span class="ic" style="color:var(--rb-blue)"><rb-icon name="msg" size="14"></rb-icon></span>2 comments posted<span class="mono">at a1b2c3d</span></div>
           <div><span class="ic" style="color:var(--rb-green)"><rb-icon name="ok" size="14"></rb-icon></span>Approved<span class="mono">at 7c4e1b9</span></div>
-          <div><span class="ic" style="color:var(--rb-mute)"><rb-icon name="hourglass" size="14"></rb-icon></span>Waiting on author<span class="mono">3h</span></div>
           <div><span class="ic" style="color:var(--rb-grey)"><rb-icon name="slash" size="14"></rb-icon></span>Dismissed<span class="mono">until new commits</span></div>
         </div>
       </div>
@@ -289,9 +288,8 @@
 
   <section id="safety" class="wrap section safety">
     <div class="head">
-      <span class="eyebrow">Safety</span>
       <h2>It drafts. You decide. Nothing in between.</h2>
-      <p class="lede">ReviewBar has write access to your merge requests because posting and approving are your job. It only uses that access when you press the button, and it checks first.</p>
+      <p class="lede">ReviewBar can write to your MRs and PRs because posting and approving are your job. It only uses that access when you press the button, and it checks first.</p>
       <div class="card" style="gap:8px;margin-top:12px;padding:14px;font-size:12px">
         <div style="display:flex;gap:8px;padding:10px 12px;border-radius:8px;background:var(--rb-tint)"><span class="ic" style="color:var(--rb-red);margin-top:1px"><rb-icon name="octx" size="13" stroke="2"></rb-icon></span><span style="line-height:1.45"><span style="font-weight:510;color:var(--rb-head)">MR changed since review.</span> Re-review before posting.</span></div>
         <div style="display:flex;flex-direction:column;gap:6px;padding:4px 4px 0">
@@ -300,27 +298,30 @@
         </div>
       </div>
     </div>
-    <ul class="list">
+    <div class="group">
+    <div><h3>It waits for you</h3><ul class="list">
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="shield" size="16" stroke="1.5"></rb-icon></span><span><b>Never posts or approves on its own</b>Every comment and every approval starts with you pressing a button, after a preview of exactly what will be sent.</span></li>
-      <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="branch" size="16" stroke="1.5"></rb-icon></span><span><b>Head-SHA check before every write</b>Before posting, ReviewBar compares the MR head with the commit it reviewed. They must match.</span></li>
-      <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="octx" size="16" stroke="1.5"></rb-icon></span><span><b>Refuses when the MR changed</b>If new commits landed, posting is blocked and you are asked to re-review. Line anchors would point at the wrong code.</span></li>
+      <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="branch" size="16" stroke="1.5"></rb-icon></span><span><b>Head-SHA check before every write</b>Before posting, ReviewBar compares the current head commit with the one it reviewed. They must match.</span></li>
+      <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="octx" size="16" stroke="1.5"></rb-icon></span><span><b>Refuses when the code changed</b>If new commits landed, posting is blocked and you are asked to re-review. Line anchors would point at the wrong code.</span></li>
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="lock" size="16" stroke="1.5"></rb-icon></span><span><b>Security findings never posted inline</b>Anything tagged Security stays in ReviewBar. You choose how to raise it, outside the public diff.</span></li>
+    </ul></div>
+    <div><h3>Your code stays yours</h3><ul class="list">
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="cpu" size="16" stroke="1.5"></rb-icon></span><span><b>Engines are read-only</b>Claude and Codex receive the diff and return findings. They have no tokens and cannot touch GitLab or GitHub.</span></li>
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="user" size="16" stroke="1.5"></rb-icon></span><span><b>Tokens stay in the Keychain</b>GitLab and GitHub tokens are stored in the macOS Keychain, or reused from your glab and gh login, and only used for API calls you trigger or allow.</span></li>
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="inbox" size="16" stroke="1.5"></rb-icon></span><span><b>All data stays on your Mac</b>Reviews, findings and history live in a local database. There is no ReviewBar server.</span></li>
       <li><span class="ic" style="color:var(--rb-head);margin-top:2px"><rb-icon name="slash" size="16" stroke="1.5"></rb-icon></span><span><b>No telemetry</b>No analytics and no crash reporting.</span></li>
-    </ul>
+    </ul></div>
+    </div>
   </section>
 
   <section id="features" class="wrap section" style="display:flex;flex-direction:column;gap:40px">
     <div class="head">
-      <span class="eyebrow">Features</span>
       <h2>Small, and built for the menu bar.</h2>
     </div>
     <div class="grid features">
       <div class="card feature"><span class="ico"><rb-icon name="inbox" size="16" stroke="1.5"></rb-icon></span><b>Segmented inbox</b><span>Decide, In progress, Waiting, Failed, Done. Grouped by what you need to do, or by repo if you prefer.</span><span class="mono">⌘1 – ⌘5</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="refresh" size="16" stroke="1.5"></rb-icon></span><b>Knows when code moved</b><span>New commits mark a review outdated, so you never post against stale code. Re-review checks only the new commits.</span><span class="mono">Re-review now · Review anyway</span></div>
-      <div class="card feature"><span class="ico"><rb-icon name="cpu" size="16" stroke="1.5"></rb-icon></span><b>Second opinion</b><span>Run Claude and Codex on the same MR. Findings both engines agree on are tagged.</span><span class="mono">Claude ↔ Codex</span></div>
+      <div class="card feature"><span class="ico"><rb-icon name="cpu" size="16" stroke="1.5"></rb-icon></span><b>Second opinion</b><span>Run Claude and Codex on the same MR or PR. Findings both engines agree on are tagged.</span><span class="mono">Claude ↔ Codex</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="pause" size="16" stroke="1.5"></rb-icon></span><b>Resource gate</b><span>Point ReviewBar at your own gate command. When it says the Mac is busy, the review waits in the queue and tries again later.</span><span class="mono">Running 1 of 1 slot</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="bell" size="16" stroke="1.5"></rb-icon></span><b>Notifications that say something</b><span>Severity counts in the title. Quiet hours deliver silently. A daily digest if you prefer one.</span><span class="mono">Open · Snooze</span></div>
       <div class="card feature"><span class="ico"><rb-icon name="arrow" size="16" stroke="1.5"></rb-icon></span><b>Keyboard first</b><span>Global shortcut to open, arrows to move, Return to review, ⌘↩ to post the selection.</span><span class="mono">⌥⌘R</span></div>
@@ -336,7 +337,7 @@
       <div class="card install">
         <div class="cmd">
           <div class="cmd-bar"><span>Terminal</span><button type="button" class="copy">Copy command</button></div>
-          <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install --cask ganeshmani/tap/reviewbar</code></pre>
+          <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install <span class="nw">--cask</span> ganeshmani/tap/reviewbar</code></pre>
           <span class="sr-only" aria-live="polite"></span>
         </div>
         <p class="alt">Homebrew asks you to trust a new tap once; that's the first half of the command. No Homebrew? <a class="link" href="https://github.com/ganeshmani/reviewbar/releases/latest/download/ReviewBar.dmg">Download ReviewBar</a> <span class="meta">(.dmg, 3.7&nbsp;MB)</span> and drag it to Applications.</p>
@@ -354,28 +355,27 @@
 
   <section id="faq" class="wrap section faq-wrap">
     <div class="head">
-      <span class="eyebrow">FAQ</span>
       <h2>Questions</h2>
     </div>
     <div class="faq">
       <details open><summary>Does ReviewBar ever post or approve on its own?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>No. Every comment and approval needs you to press a button in a sheet that shows exactly what will be sent. Auto-review only means the review runs automatically; the decision never does.</p></details>
       <details><summary>Where does my code go?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>The diff goes to the engine you choose, Claude or Codex, under your own account and its terms. Nothing goes to a ReviewBar server, because there isn't one.</p></details>
-      <details><summary>Which review engines are supported?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>Claude and Codex. You can set a default, switch per MR, or run both as a second opinion and see which findings they agree on.</p></details>
+      <details><summary>Which review engines are supported?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>Claude and Codex. You can set a default, switch per MR or PR, or run both as a second opinion and see which findings they agree on.</p></details>
       <details><summary>Does it work with self-managed GitLab and GitHub Enterprise?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>Yes. Add the host in Settings → Accounts. ReviewBar only talks to the hosts you add.</p></details>
-      <details><summary>What does a review cost?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>ReviewBar is free. Reviews run on your existing Claude or Codex plan, with no API key needed. It shows the estimated cost of every review and lets you set a daily cap; once it's reached, automatic reviews pause until the next day.</p></details>
+      <details><summary>What does a review cost?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>ReviewBar is free. Reviews run on your existing Claude or Codex plan, with no API key needed. It shows an estimated cost for each review, counted against your plan's usage rather than billed, and lets you set a daily cap; once it's reached, automatic reviews pause until the next day.</p></details>
       <details><summary>Can I contribute?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>Yes. It's MIT licensed and written in Swift. Bug reports, ideas and pull requests are welcome on <a href="https://github.com/ganeshmani/reviewbar/issues" style="text-decoration:underline">GitHub</a>.</p></details>
-      <details><summary>Does it replace human review?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>No. It gives you a first read before you open the MR, so your time goes to judgement instead of hunting. You still read the code and you still decide.</p></details>
+      <details><summary>Does it replace human review?<span class="ic"><rb-icon name="plus" size="16" stroke="1.5"></rb-icon></span></summary><p>No. It gives you a first read before you open the MR or PR, so your time goes to judgement instead of hunting. You still read the code and you still decide.</p></details>
     </div>
   </section>
 
   <section class="wrap close">
-    <h2>Your next review is already queued.</h2>
+    <h2>Let the first pass be done before you look.</h2>
     <div class="cmd close-cmd">
       <div class="cmd-bar"><span>Terminal</span><button type="button" class="copy">Copy command</button></div>
-      <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install --cask ganeshmani/tap/reviewbar</code></pre>
+      <pre><code>brew trust ganeshmani/tap &amp;&amp; brew install <span class="nw">--cask</span> ganeshmani/tap/reviewbar</code></pre>
       <span class="sr-only" aria-live="polite"></span>
     </div>
-    <span class="mono">macOS 14+ · GitLab + GitHub · Claude or Codex · <a class="link" href="#download">Other ways to install</a></span>
+    <span class="mono">macOS 14+ · GitLab + GitHub · <span class="nw">Claude or Codex</span> · <a class="link" href="#download">Other ways to install</a></span>
   </section>
 </main>
 
@@ -387,7 +387,7 @@
     </div>
     <div class="col"><span style="color:var(--rb-faint)">Product</span><a href="#features">Features</a><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#download">Install</a></div>
     <div class="col"><span style="color:var(--rb-faint)">Open source</span><a href="https://github.com/ganeshmani/reviewbar">GitHub</a><a href="https://github.com/ganeshmani/reviewbar/releases">Releases</a><a href="https://github.com/ganeshmani/reviewbar/blob/main/CHANGELOG.md">Changelog</a><a href="https://github.com/ganeshmani/reviewbar/blob/main/CONTRIBUTING.md">Contributing</a></div>
-    <div class="col"><span style="color:var(--rb-faint)">Help</span><a href="#faq">FAQ</a><a href="https://github.com/ganeshmani/reviewbar/issues/new/choose">Report a bug</a><a href="#safety">Privacy</a></div>
+    <div class="col"><span style="color:var(--rb-faint)">Help</span><a href="#faq">FAQ</a><a href="https://github.com/ganeshmani/reviewbar/issues/new/choose">Report a bug</a><a href="#safety">Privacy &amp; safety</a></div>
   </div>
   <div class="wrap rail" aria-hidden="true">
     <i style="left:calc(24px + 22%);background:var(--rb-head)"></i>
@@ -396,11 +396,6 @@
   <div class="wrap" style="padding-top:8px;padding-bottom:40px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:12px;color:var(--rb-faint)"><span>© 2026 Ganesh Mani · MIT license</span><span style="flex:1"></span><span>Not affiliated with GitLab, GitHub, Anthropic or OpenAI.</span></div>
 </footer>
 
-<script>
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    addEventListener('load', function () { document.querySelectorAll('svg').forEach(function (v) { if (v.pauseAnimations) v.pauseAnimations(); }); });
-  }
-</script>
 <script>
   document.querySelectorAll('.cmd .copy').forEach(function (b) {
     var box = b.closest('.cmd'), code = box.querySelector('code'), live = box.querySelector('[aria-live]');
