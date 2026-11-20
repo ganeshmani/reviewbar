@@ -110,7 +110,7 @@ struct ReviewDetail: View {
         let (sym, color, title): (String, Color, String) =
             r.verdict == .clean ? ("checkmark.seal", RB.green, "Clean · no issues found")
             : !r.complete ? ("circle.lefthalf.filled", RB.yellow, "Partial review")
-            : c.blocker > 0 ? ("exclamationmark.triangle", RB.red, "Changes requested")
+            : c.blocker > 0 ? ("exclamationmark.triangle", RB.red, "Suggests changes")
             : ("exclamationmark.triangle", RB.orange, "Suggestions")
         return VStack(spacing: 0) {
             HStack(spacing: 6) {
@@ -125,7 +125,7 @@ struct ReviewDetail: View {
                 cell("Engine", r.engine.name)
                 cell("Reviewed", String(r.sha.prefix(7)), mono: true)
                 cell("Duration", r.duration.map(elapsed) ?? "–")
-                cell("Cost", r.costUSD.map { String(format: "$%.2f", $0) } ?? "–", last: true)
+                cell("Est. usage", r.costUSD.map { String(format: "~$%.2f", $0) } ?? "–", last: true)
             }
             if let s = r.summary, !s.isEmpty {
                 Hairline()
